@@ -1,7 +1,8 @@
 FROM geonetwork:3.10.2-postgres
 
 COPY ./alteracoes-inde.tar.gz .
-RUN tar -xzf alteracoes-inde.tar.gz -C $CATALINA_HOME/webapps/ --overwrite
+RUN tar -xzf alteracoes-inde.tar.gz -C $CATALINA_HOME/webapps/ --overwrite && \
+     rm alteracoes-inde.tar.gz
 
 COPY ./perfil-mgb2.zip .
 RUN unzip -qq perfil-mgb2.zip && \
