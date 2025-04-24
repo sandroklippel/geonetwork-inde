@@ -1,0 +1,47 @@
+volumes:
+  geonetwork:
+  pgdata:
+  pglog:
+
+services:
+  geonetwork:
+    image: ghcr.io/sandroklippel/geonetwork-inde:latest
+    healthcheck:
+      test: curl http://geonetwork:8080/
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    restart: always
+    volumes:
+      # Mounting the GeoNetwork data directory for persistence
+      - geonetwork:/usr/local/tomcat/webapps/geonetwork/WEB-INF/data
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 8080:8080
+    environment:
+      POSTGRES_DB_HOST: db
+      POSTGRES_DB_NAME: geonetwork
+      POSTGRES_DB_USERNAME: geonetwork
+      POSTGRES_DB_PASSWORD: "be2ee2e2278c1a"
+
+  db:
+    image: docker.io/postgis/postgis:17-3.5
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_USER: geonetwork
+      POSTGRES_PASSWORD: "be2ee2e2278c1a"
+      POSTGRES_DB: geonetwork
+      POSTGRES_INITDB_ARGS: "--auth-host=md5"
+      POSTGRES_HOST_AUTH_METHOD: "md5"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U geonetwork"]
+      interval: 5s
+      timeout: 5s
+    volumes:
+      # Volume for PostgreSQL data persistence
+      - pgdata:/var/lib/postgresql/data
+      # Volume for PostgreSQL log storage
+      - pglog:/var/log/postgresql
