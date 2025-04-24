@@ -1,0 +1,16 @@
+[Unit]
+Description=Geonetwork-INDE
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/geonetwork
+ExecStart=/usr/bin/podman-compose -f docker-compose.yaml up
+ExecStop=/usr/bin/podman-compose -f docker-compose.yaml down
+TimeoutStopSec=30
+RemainAfterExit=yes
+User=geonetwork
+
+[Install]
+WantedBy=multi-user.target
