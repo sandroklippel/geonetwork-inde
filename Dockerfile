@@ -4,6 +4,9 @@ COPY ./alteracoes-inde.tar.gz .
 RUN tar -xzf alteracoes-inde.tar.gz -C $CATALINA_HOME/webapps/ --overwrite && \
      rm alteracoes-inde.tar.gz
 
+RUN sed -i -e 's#<import resource="../config-db/postgres.xml"/>#<!--<import resource="../config-db/postgres.xml"/> -->#g' $CATALINA_HOME/webapps/geonetwork/WEB-INF/config-node/srv.xml && \
+     sed -i -e 's#<!--<import resource="../config-db/postgres-postgis.xml"/> -->#<import resource="../config-db/postgres-postgis.xml"/>#g' $CATALINA_HOME/webapps/geonetwork/WEB-INF/config-node/srv.xml
+
 COPY ./perfil-mgb2.zip .
 RUN unzip -qq perfil-mgb2.zip && \
      rm perfil-mgb2.zip && \
