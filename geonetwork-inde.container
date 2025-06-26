@@ -1,0 +1,15 @@
+[Unit]
+Description=Geonetwork INDE service
+
+[Container]
+Image=ghcr.io/sandroklippel/geonetwork-inde:latest
+EnvironmentFile=/opt/gn.env
+PublishPort=8080:8080
+Volume=/data/gndata:/usr/local/tomcat/webapps/geonetwork/WEB-INF/data
+
+[Service]
+Restart=always
+
+[Install]
+# Start by default on boot
+WantedBy=multi-user.target default.target
