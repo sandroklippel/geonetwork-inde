@@ -7,10 +7,11 @@ all: conf install
 conf: gn.env
 	install -p -m 0600 gn.env /opt/gn.env
 	install --verbose --directory --owner root --group root --mode 750 /data/gndata
+    install --verbose --directory --owner root --group root /data/gndata/config/schema_plugins
 	unzip -qq perfil-mgb2.zip && \
+	cp -r mgb2/iso19115-3.2018 /data/gndata/config/schema_plugins/ && \
+    cp -r mgb2/iso19115-3.mgb /data/gndata/config/schema_plugins/ && \
     rm perfil-mgb2.zip && \
-    install --verbose --directory --owner root --group root mgb2/iso19115-3.2018 /data/gndata/config/schema_plugins/ && \
-    install --verbose --directory --owner root --group root /data/gndata/config/schema_plugins/ && \
     rm -rf mgb2
 
 install: 
